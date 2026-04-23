@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物资管理</title>
+</head>
+
+<body>
+
+<h2>📦 我的物资系统</h2>
+
+<input id="name" placeholder="输入物资名称">
+<input id="qty" type="number" placeholder="数量">
+
+<button onclick="add()">入库</button>
+
+<ul id="list"></ul>
+
+<script>
+let data = JSON.parse(localStorage.getItem("db")) || [];
+
+function save(){
+  localStorage.setItem("db", JSON.stringify(data));
+  render();
+}
+
+function add(){
+  let name = document.getElementById("name").value;
+  let qty = parseInt(document.getElementById("qty").value);
+
+  data.push({name, qty});
+  save();
+}
+
+function render(){
+  let list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.forEach((item,i)=>{
+    list.innerHTML += `
+      <li>
+        ${item.name} - ${item.qty}
+        <button onclick="out(${i})">出库</button>
+      </li>
+    `;
+  });
+}
+
+function out(i){
+  data[i].qty--;
+  save();
+}
+
+render();
+</script>
+
+</body>
+</html>
